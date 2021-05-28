@@ -1,0 +1,14 @@
+Run with:
+
+    SET DEBUG=main:*
+    npm start
+
+Request Parameters:
+
+    list of strings
+        query
+        entity_type
+
+    var search = {
+        query: string
+    }
