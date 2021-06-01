@@ -11,9 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.linkedEntities = exports.entities = exports.language = exports.keyPhrases = exports.sentiment = void 0;
 const ai_text_analytics_1 = require("@azure/ai-text-analytics");
-// import { url, key } from '../ignore/text-analytics-settings';
-// const client = new TextAnalyticsClient(url(), new AzureKeyCredential(key()));
-const client = new ai_text_analytics_1.TextAnalyticsClient('url', new ai_text_analytics_1.AzureKeyCredential('key'));
+const text_analytics_settings_1 = require("../ignore/text-analytics-settings");
+const client = new ai_text_analytics_1.TextAnalyticsClient(text_analytics_settings_1.url(), new ai_text_analytics_1.AzureKeyCredential(text_analytics_settings_1.key()));
 function sentiment(documents) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield client.analyzeSentiment(documents);

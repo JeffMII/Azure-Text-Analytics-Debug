@@ -1,8 +1,8 @@
 import { TextAnalyticsClient, AzureKeyCredential } from '@azure/ai-text-analytics';
 // import { url, key } from '../ignore/text-analytics-settings';
 
-// const client = new TextAnalyticsClient(url(), new AzureKeyCredential(key()));
 const client = new TextAnalyticsClient('url', new AzureKeyCredential('key'));
+// const client = new TextAnalyticsClient(url(), new AzureKeyCredential(key()));
 
 export async function sentiment(documents : string[]) {
     return await client.analyzeSentiment(documents);

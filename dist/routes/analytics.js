@@ -27,102 +27,171 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const search = __importStar(require("../services/bing/search"));
 const analytics = __importStar(require("../services/analytics/analytics"));
 const router = express_1.Router();
 router.get('/search', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    // await search.query(req.query.query.toString(), res, sentiment);
+    try {
+        // await search.query(req.query.query.toString(), res, sentiment);
+    }
+    catch (err) {
+        res.statusCode = 500;
+        res.send({ error: err.message });
+    }
 }));
 router.get('/search/analyze', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    yield search.query(req.query.query.toString(), res, analyze);
+    try {
+        yield search.query(req.query.query.toString(), res, analyze);
+    }
+    catch (err) {
+        res.statusCode = 500;
+        res.send({ error: err.message });
+    }
 }));
 function analyze(res, searchRes) {
     return __awaiter(this, void 0, void 0, function* () {
-        const sentiments = [];
-        const phrases = [];
-        const languages = [];
-        const ents = [];
-        const linkedEnts = [];
-        for (const page of searchRes.webPages.value) {
-            const sent = yield analytics.sentiment([page.snippet]);
-            const phrs = yield analytics.keyPhrases([page.snippet]);
-            const lang = yield analytics.language([page.snippet]);
-            const es = yield analytics.entities([page.snippet]);
-            const linkedEs = yield analytics.linkedEntities([page.snippet]);
-            sentiments.push(sent);
-            phrases.push(phrs);
-            languages.push(lang);
-            ents.push(es);
-            linkedEnts.push(linkedEs);
+        try {
+            const snippets = [];
+            for (const page of searchRes.webPages.value) {
+                snippets.push(page.snippet);
+            }
+            const sentiments = yield analytics.sentiment(snippets);
+            const phrases = yield analytics.keyPhrases(snippets);
+            const languages = yield analytics.language(snippets);
+            const ents = yield analytics.entities(snippets);
+            const linkedEntities = yield analytics.linkedEntities(snippets);
+            res.send({ snippets, sentiments, phrases, languages, entities: ents, linkedEntities });
         }
-        res.send({ sentiments, phrases, languages, entities: ents, linkedEntities: linkedEnts });
+        catch (err) {
+            res.statusCode = 500;
+            res.send({ error: err.message });
+        }
     });
 }
 router.get('/search/analyze/sentiment', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    yield search.query(req.query.query.toString(), res, sentiment);
+    try {
+        yield search.query(req.query.query.toString(), res, sentiment);
+    }
+    catch (err) {
+        res.statusCode = 500;
+        res.send({ error: err.message });
+    }
 }));
 function sentiment(res, searchRes) {
     return __awaiter(this, void 0, void 0, function* () {
-        const sentiments = [];
-        for (const page of searchRes.webPages.value) {
-            const sent = yield analytics.sentiment([page.snippet]);
-            sentiments.push(sent);
+        try {
+            const snippets = [];
+            for (const page of searchRes.webPages.value) {
+                snippets.push(page.snippet);
+            }
+            const sentiments = yield analytics.sentiment(snippets);
+            res.send({ snippets, sentiments });
         }
-        res.send({ sentiments });
+        catch (err) {
+            res.statusCode = 500;
+            res.send({ error: err.message });
+        }
     });
 }
 router.get('/search/analyze/phrases', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    yield search.query(req.query.query.toString(), res, keyPhrases);
+    try {
+        yield search.query(req.query.query.toString(), res, keyPhrases);
+    }
+    catch (err) {
+        res.statusCode = 500;
+        res.send({ error: err.message });
+    }
 }));
 function keyPhrases(res, searchRes) {
     return __awaiter(this, void 0, void 0, function* () {
-        const phrases = [];
-        for (const page of searchRes.webPages.value) {
-            const phrs = yield analytics.keyPhrases([page.snippet]);
-            phrases.push(phrs);
+        try {
+            const snippets = [];
+            for (const page of searchRes.webPages.value) {
+                snippets.push(page.snippet);
+            }
+            const phrases = yield analytics.keyPhrases(snippets);
+            res.send({ snippets, phrases });
         }
-        res.send({ phrases });
+        catch (err) {
+            res.statusCode = 500;
+            res.send({ error: err.message });
+        }
     });
 }
 router.get('/search/analyze/language', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    yield search.query(req.query.query.toString(), res, language);
+    try {
+        yield search.query(req.query.query.toString(), res, language);
+    }
+    catch (err) {
+        res.statusCode = 500;
+        res.send({ error: err.message });
+    }
 }));
 function language(res, searchRes) {
     return __awaiter(this, void 0, void 0, function* () {
-        const languages = [];
-        for (const page of searchRes.webPages.value) {
-            const lang = yield analytics.language([page.snippet]);
-            languages.push(lang);
+        try {
+            const snippets = [];
+            for (const page of searchRes.webPages.value) {
+                snippets.push(page.snippet);
+            }
+            const languages = yield analytics.language(snippets);
+            res.send({ snippets, languages });
         }
-        res.send({ languages });
+        catch (err) {
+            res.statusCode = 500;
+            res.send({ error: err.message });
+        }
     });
 }
 router.get('/search/analyze/entities', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    yield search.query(req.query.query.toString(), res, entities);
+    try {
+        yield search.query(req.query.query.toString(), res, entities);
+    }
+    catch (err) {
+        res.statusCode = 500;
+        res.send({ error: err.message });
+    }
 }));
 function entities(res, searchRes) {
     return __awaiter(this, void 0, void 0, function* () {
-        const ents = [];
-        for (const page of searchRes.webPages.value) {
-            const es = yield analytics.entities([page.snippet]);
-            ents.push(es);
+        try {
+            const snippets = [];
+            for (const page of searchRes.webPages.value) {
+                snippets.push(page.snippet);
+            }
+            const ents = yield analytics.entities(snippets);
+            res.send({ snippets, entities: ents });
         }
-        res.send({ entities: ents });
+        catch (err) {
+            res.statusCode = 500;
+            res.send({ error: err.message });
+        }
     });
 }
 router.get('/search/analyze/linked/entities', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    yield search.query(req.query.query.toString(), res, linked_entities);
+    try {
+        yield search.query(req.query.query.toString(), res, linked_entities);
+    }
+    catch (err) {
+        res.statusCode = 500;
+        res.send({ error: err.message });
+    }
 }));
 function linked_entities(res, searchRes) {
     return __awaiter(this, void 0, void 0, function* () {
-        const linkedEnts = [];
-        for (const page of searchRes.webPages.value) {
-            const linkedEs = yield analytics.linkedEntities([page.snippet]);
-            linkedEnts.push(linkedEs);
+        try {
+            const snippets = [];
+            for (const page of searchRes.webPages.value) {
+                snippets.push(page.snippet);
+            }
+            const linkedEntities = yield analytics.linkedEntities(snippets);
+            res.send({ snippets, linkedEntities });
         }
-        res.send({ linkedEntities: linkedEnts });
+        catch (err) {
+            res.statusCode = 500;
+            res.send({ error: err.message });
+        }
     });
 }
 module.exports = router;
